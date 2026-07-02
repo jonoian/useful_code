@@ -1,0 +1,32 @@
+/*
+Paste this function within the Editable Expression on Field Maps Designer.
+*/
+
+function check_app_client(layer_name, GID_field_name) {
+  var temp_lyr = FeatureSetByName($map, layer_name, [GID_field_name], false);
+  var first_feat = First(temp_lyr);
+  if (IsEmpty(first_feat)) {
+    return "Error: No features yet defined. Cannot check client."
+  } else {
+    if (first_feat[GID_field_name] == Upper(first_feat[GID_field_name])) {
+      return "Field Maps"
+    } else {
+      return "Map Viewer"
+    }
+  }
+}
+
+//Find if user is using ArcGIS Field Maps or ArcGIS Map Viewer
+var client = check_app_client("Free Feed Locations", "GlobalID");
+
+if (client == "Field Maps") {
+  // If using Field Maps, disable editing until calculation has run
+  if ($feature.start_date == null) {
+    return false
+  } else {
+    return true
+  }
+} else {
+  // If using Map Viewer, ensure editing is always enabled
+  return true
+}
