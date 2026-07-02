@@ -1,0 +1,28 @@
+/*
+DIFFERENTIATE IF USER IS USING ARCGIS FIELD MAPS OR ARCGIS MAP VIEWER
+The below function works because:
+- Field maps GlobalID's are always UPPERCASE format
+- Map Viewer GlobalID's are always lowercase format
+By exploiting the difference between these formats we can make an assumption as to which app is reading the arcade code.
+
+Prerequisites:
+- A layer within your map (or offline map area) contains at least 1 feature.
+- The layer contains a GlobalID field.
+*/
+
+function check_app_client(layer_name, GID_field_name) {
+  var temp_lyr = FeatureSetByName($map, layer_name, [GID_field_name], false); // Pull layer.
+  var first_feat = First(temp_lyr); // Take the first feature.
+  if (IsEmpty(first_feat)) { // Check if any features exist.
+    return "Error: No features yet defined. Cannot check client."; // Return error message if no features exist.
+  } else {
+    if (first_feat[GID_field_name] == Upper(first_feat[GID_field_name])) { // Check if GID follows Field Maps format.
+      return "Field Maps"; // Return "Field Maps"
+    } else {
+      return "Map Viewer"; // Otherwise return "Map Viewer"
+    }
+  }
+}
+
+// When defining your layer name, check the Arcade profile variables for the syntax to follow
+var client = check_app_client("Some layer name", "GlobalID");
