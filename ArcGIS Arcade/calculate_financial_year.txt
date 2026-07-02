@@ -1,0 +1,16 @@
+// Autopopulate FY
+var date = $feature.start_date
+var month = ISOMonth(date)
+var year = ISOYear(date)
+var temp_year
+var FY_value
+
+if (month > 6) {
+  temp_year = year+1
+  FY_value = year+"/"+Right(temp_year, 2)
+} else {
+  temp_year = year-1
+  FY_value = temp_year+"/"+Right(year, 2)
+}
+
+return FY_value
