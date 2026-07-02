@@ -1,0 +1,23 @@
+function check_app_client(layer_name, GID_field_name) {
+  var temp_lyr = FeatureSetByName($map, layer_name, [GID_field_name], false); // Pull layer.
+  var first_feat = First(temp_lyr); // Take the first feature.
+  if (IsEmpty(first_feat)) { // Check if any features exist.
+    return "Error: No features yet defined. Cannot check client."; // Return error message if no features exist.
+  } else {
+    if (first_feat[GID_field_name] == Upper(first_feat[GID_field_name])) { // Check if GID follows Field Maps format.
+      return "Field Maps"; // Return "Field Maps"
+    } else {
+      return "Map Viewer"; // Otherwise return "Map Viewer"
+    }
+  }
+}
+
+
+var client = check_app_client("Free Feed Locations", "GlobalID");
+if (client == "Field Maps") {
+  if ($feature.start_date == null) {
+    return Now()
+  } else {
+    return $feature.start_date
+  }
+}
