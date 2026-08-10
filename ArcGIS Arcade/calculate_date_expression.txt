@@ -12,12 +12,19 @@ function check_app_client(layer_name, GID_field_name) {
   }
 }
 
+var edit_context = $editcontext.editType
 
-var client = check_app_client("Free Feed Locations", "GlobalID");
-if (client == "Field Maps") {
-  if ($feature.start_date == null) {
-    return Now()
-  } else {
-    return $feature.start_date
+if (edit_context == "INSERT") {
+
+  var client = check_app_client("Rabbit Baiting", "GlobalID");
+  if (client == "Field Maps") {
+    if ($feature.event_date == null) {
+      return Now()
+    } else {
+      return $feature.event_date
+    }
   }
+
+} else {
+  return $feature.event_date
 }
